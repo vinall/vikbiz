@@ -9,24 +9,27 @@
     
         $name = str_replace(array("\r","\n"),array(" "," ") , strip_tags(trim($_POST["name"])));
         $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
-        $url = filter_var(trim($_POST["website"]), FILTER_SANITIZE_URL)
-        $phone = filter_var(trim($_POST['phone']))
-        
+        $url = filter_var(trim($_POST["website"]), FILTER_SANITIZE_URL);
+        $phone = filter_var(trim($_POST['phone']));
 
         // If you want to clean it up manually you can:
         $phone = preg_replace('/[^0-9+-]/', '', $_POST['phone']);
 
         // If you want to check the length of the phone number and that it's valid you can:
-        if(strlen($phone) === 10) {
-            if (!preg_match('/^[0-9-+]$/',$var)) { 
+        if(strlen($phone) == 10 or (strlen($phone) == 11) or strlen($phone) == 12) {
+            if (preg_match('/^[0-9-+]$/',$var)) { 
                         http_response_code(400);
                         echo "$phone is not valid. Phone number should be 10 digit number. Special characters are not allowed.";
                         exit();
             }
         }
+        else {
+            echo ("$phone is not valid");
+        }
 
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
             echo("$url is not a valid URL");
+            exit;
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL) ) {
@@ -35,7 +38,7 @@
             exit;
         }   
         
-        if ( empty($name) OR empty($message) OR empty($phone)) {
+        if ( empty($name) OR empty($email) OR empty($phone) OR empty($url)) {
             # Set a 400 (bad request) response code and exit.
             http_response_code(400);
             echo "Please complete the form and try again.";
@@ -45,7 +48,8 @@
         # Mail Content
         $content = "Name: $name\n";
         $content .= "Email: $email\n\n";
-        $content .= "Message:\n$message\n";
+        $content .= "Phone:\n$phone\n";
+        $content .= "URL:\n$url\n";
         $subject = "Mail from request form from " . $email;
 
         # email headers.

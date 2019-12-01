@@ -2,9 +2,6 @@
 
 
 (function ($) {
-
-
-
 "use strict"; // Start of use strict
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -17,6 +14,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+    
   // Smooth scrolling using jQuery easing
   $('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function() {
     if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
@@ -57,17 +55,32 @@ $('.slick-slider').slick({
   // Collapse Navbar
   var navbarCollapse = function() {
 
-    if ($("#navbar").offset().top > 100) {
+    if ($("#navbar").offset().top > 50) {
       $("#navbar").addClass("navbar-shrink border-bottom border-dark");
     } else {
       $("#navbar").removeClass("navbar-shrink border-bottom border-dark");
     }
   
   };
+ 
+  var navbarDatatToggler = function() {
+    
+    if ($("#navbar").width() < 995) {
+      $("#dropdown05").attr("data-toggle", "dropdown");
+      $('.dropdown').removeAttr('hover');
+     
+    } else {
+      $("#dropdown05").removeAttr('data-toggle');
+    }
+  
+  };
+  //To enable data toggle when collapsed
+  navbarDatatToggler();
   // Collapse now if page is not at top
   navbarCollapse();
   // Collapse the navbar when page is scrolled
   $(window).scroll(navbarCollapse);
+  $(window).resize(navbarDatatToggler);
 
   // Floating label headings for the contact form
   $(function() {
